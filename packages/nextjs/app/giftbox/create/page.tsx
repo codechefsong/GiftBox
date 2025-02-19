@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { GiftboxPreview } from "./_components/GiftboxPreview";
 import { ArrowLeft, ArrowRight, Coins, Copy, Gift, MessageSquare, Send, Sparkles, Upload } from "lucide-react";
 import type { NextPage } from "next";
 
@@ -147,6 +148,7 @@ const GiftboxCreator: NextPage = () => {
                   type="file"
                   className="hidden"
                   accept="image/*"
+                  //@ts-ignore
                   onChange={e => setFormData(prev => ({ ...prev, image: e.target.files[0] }))}
                 />
               </div>
@@ -228,56 +230,60 @@ const GiftboxCreator: NextPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
-      <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
-        <div className="p-6">
-          <div className="flex items-center justify-between mb-8">
-            {Object.entries(stepIcons).map(([step, icon]) => (
-              <div
-                key={step}
-                className={`flex items-center ${
-                  parseInt(step) === currentStep
-                    ? "text-purple-600"
-                    : parseInt(step) < currentStep
-                      ? "text-green-500"
-                      : "text-gray-300"
-                }`}
-              >
-                <div className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-current">
-                  {icon}
+      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+          <div className="p-6">
+            <div className="flex items-center justify-between mb-8">
+              {Object.entries(stepIcons).map(([step, icon]) => (
+                <div
+                  key={step}
+                  className={`flex items-center ${
+                    parseInt(step) === currentStep
+                      ? "text-purple-600"
+                      : parseInt(step) < currentStep
+                        ? "text-green-500"
+                        : "text-gray-300"
+                  }`}
+                >
+                  <div className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-current">
+                    {icon}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
 
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            {currentStep === 1 && "Basic Information"}
-            {currentStep === 2 && "Add Message & Media"}
-            {currentStep === 3 && "Token Contribution"}
-            {currentStep === 4 && "Finalize Giftbox"}
-          </h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+              {currentStep === 1 && "Basic Information"}
+              {currentStep === 2 && "Add Message & Media"}
+              {currentStep === 3 && "Token Contribution"}
+              {currentStep === 4 && "Finalize Giftbox"}
+            </h2>
 
-          {renderStepContent()}
+            {renderStepContent()}
 
-          <div className="flex justify-between mt-8">
-            {currentStep > 1 && (
-              <button
-                onClick={handlePrevStep}
-                className="flex items-center gap-2 px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 outline-none"
-              >
-                <ArrowLeft className="w-4 h-4" /> Previous
-              </button>
-            )}
+            <div className="flex justify-between mt-8">
+              {currentStep > 1 && (
+                <button
+                  onClick={handlePrevStep}
+                  className="flex items-center gap-2 px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 outline-none"
+                >
+                  <ArrowLeft className="w-4 h-4" /> Previous
+                </button>
+              )}
 
-            {currentStep < 4 && (
-              <button
-                onClick={handleNextStep}
-                className="flex items-center gap-2 px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 outline-none ml-auto"
-              >
-                Next <ArrowRight className="w-4 h-4" />
-              </button>
-            )}
+              {currentStep < 4 && (
+                <button
+                  onClick={handleNextStep}
+                  className="flex items-center gap-2 px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 outline-none ml-auto"
+                >
+                  Next <ArrowRight className="w-4 h-4" />
+                </button>
+              )}
+            </div>
           </div>
         </div>
+
+        <GiftboxPreview data={formData} />
       </div>
     </div>
   );
