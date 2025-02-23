@@ -9,7 +9,7 @@ interface Giftbox {
   message: string;
   image: any;
   asset: string;
-  amount: number;
+  amount: string;
 }
 
 type GiftboxProps = {

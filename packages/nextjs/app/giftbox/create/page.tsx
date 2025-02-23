@@ -30,6 +30,7 @@ const GiftboxCreator: NextPage = () => {
     "Other",
   ];
 
+  //@ts-ignore
   const handleInputChange = e => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
