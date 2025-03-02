@@ -32,9 +32,9 @@ contract DigitalGiftboxFactory {
 
         deployedGiftboxes.push(address(newDigitalGiftbox));
         userGiftboxes[msg.sender].push(address(newDigitalGiftbox));
-        
+
         emit GiftboxCreated(giftboxAddress, msg.sender, title);
-        
+
         return giftboxAddress;
     }
 
@@ -63,17 +63,17 @@ contract DigitalGiftboxFactory {
      */
     function getDeployedGiftboxes(uint256 startIndex, uint256 count) external view returns (address[] memory) {
         require(startIndex < deployedGiftboxes.length, "Start index out of bounds");
-        
+
         if (startIndex + count > deployedGiftboxes.length) {
             count = deployedGiftboxes.length - startIndex;
         }
-        
+
         address[] memory result = new address[](count);
-        
+
         for (uint256 i = 0; i < count; i++) {
             result[i] = deployedGiftboxes[startIndex + i];
         }
-        
+
         return result;
     }
 }

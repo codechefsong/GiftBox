@@ -21,11 +21,7 @@ contract DigitalGiftbox {
     event ContributionAdded(address indexed contributor, uint256 amount);
     event GiftboxDelivered(address indexed recipient);
 
-    constructor(
-        string memory _recipient,
-        string memory _occasion,
-        string memory _title
-    ) {
+    constructor(string memory _recipient, string memory _occasion, string memory _title) {
         creator = msg.sender;
         recipient = _recipient;
         occasion = _occasion;
@@ -39,7 +35,7 @@ contract DigitalGiftbox {
      */
     function addMessage(string memory message) public {
         messages.push(message);
-        
+
         bool isContributor = false;
         for (uint i = 0; i < contributors.length; i++) {
             if (contributors[i] == msg.sender) {
@@ -47,11 +43,11 @@ contract DigitalGiftbox {
                 break;
             }
         }
-        
+
         if (!isContributor) {
             contributors.push(msg.sender);
         }
-        
+
         emit MessageAdded(msg.sender, message);
     }
 
@@ -60,9 +56,9 @@ contract DigitalGiftbox {
      */
     function addContribution() public payable {
         require(msg.value > 0, "Contribution must be greater than 0");
-        
+
         tokenPot += msg.value;
-        
+
         bool isContributor = false;
         for (uint i = 0; i < contributors.length; i++) {
             if (contributors[i] == msg.sender) {
@@ -70,15 +66,14 @@ contract DigitalGiftbox {
                 break;
             }
         }
-        
+
         if (!isContributor) {
-           contributors.push(msg.sender);
+            contributors.push(msg.sender);
         }
-        
+
         emit ContributionAdded(msg.sender, msg.value);
     }
 
-    
     /**
      * @dev Get all messages for a giftbox
      */
@@ -95,20 +90,23 @@ contract DigitalGiftbox {
 
     /**
      * @dev Get giftbox details
-     * @param tokenId The ID of the giftbox
      */
-    function getGiftboxDetails(uint256 tokenId) public view returns (
-        address _creator,
-        string memory _recipient,
-        string memory _occasion,
-        string memory _title,
-        uint256 _createdAt,
-        uint256 _deliveryDate,
-        bool _isDelivered,
-        uint256 _tokenPot,
-        uint256 _messageCount,
-        uint256 _contributorCount
-    ) { 
+    function getGiftboxDetails()
+        public
+        view
+        returns (
+            address _creator,
+            string memory _recipient,
+            string memory _occasion,
+            string memory _title,
+            uint256 _createdAt,
+            uint256 _deliveryDate,
+            bool _isDelivered,
+            uint256 _tokenPot,
+            uint256 _messageCount,
+            uint256 _contributorCount
+        )
+    {
         return (
             creator,
             recipient,

@@ -22,13 +22,17 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
 
-  // await deploy("DigitalGiftbox", {
-  //   from: deployer,
-  //   log: true,
-  //   // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
-  //   // automatically mining the contract deployment transaction. There is no effect on live networks.
-  //   autoMine: true,
-  // });
+  const mockData = {
+    recipient: "Bob",
+    occasion: "Graduation",
+    title: "Good Job",
+  };
+  await deploy("DigitalGiftbox", {
+    from: deployer,
+    args: [mockData.recipient, mockData.occasion, mockData.title],
+    log: true,
+    autoMine: true,
+  });
 
   await deploy("DigitalGiftboxFactory", {
     from: deployer,

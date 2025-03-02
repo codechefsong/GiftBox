@@ -1,6 +1,14 @@
 import { Send } from "lucide-react";
+import { useScaffoldReadContractWithContractAddress } from "~~/hooks/scaffold-eth/useScaffoldReadContractWithContractAddress";
 
 export const Giftbox = ({ address }: { address: string }) => {
+  const { data: giftboxData } = useScaffoldReadContractWithContractAddress({
+    contractName: "DigitalGiftbox",
+    // @ts-ignore
+    contractAddress: address,
+    functionName: "getGiftboxDetails",
+  });
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case "Draft":
@@ -14,16 +22,22 @@ export const Giftbox = ({ address }: { address: string }) => {
     }
   };
 
+  console.log(giftboxData);
+
   return (
     <tr className="border-b hover:bg-gray-50">
       <td className="p-4">
         <div className="flex items-center">
-          <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center mr-3">B</div>
-          {address}
+          <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center mr-3">
+            {giftboxData?.length && giftboxData[1].charAt(0)}
+          </div>
+          {giftboxData?.length && giftboxData[1]}
         </div>
       </td>
       <td className="p-4">
-        <span className={`px-3 py-1 rounded-full text-sm ${getStatusColor("giftbox.status")}`}>giftbox.status</span>
+        <span className={`px-3 py-1 rounded-full text-sm ${getStatusColor("giftbox.status")}`}>
+          {giftboxData?.length && giftboxData[6] ? "Send" : "Not Send"}
+        </span>
       </td>
       <td className="p-4">0</td>
       <td className="p-4">0</td>
