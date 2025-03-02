@@ -51,7 +51,7 @@ export function useScaffoldWriteContractWithContractAddress<TContractName extend
  * @param config.chainId - optional chainId that is configured with the scaffold project to make use for multi-chain interactions.
  * @param writeContractParams - wagmi's useWriteContract parameters
  */
-export function useScaffoldWriteContract<TContractName extends ContractName>(
+export function useScaffoldWriteContractWithContractAddress<TContractName extends ContractName>(
   configOrName: UseScaffoldWriteConfig<TContractName> | TContractName,
   writeContractParams?: UseWriteContractParameters,
 ): ScaffoldWriteContractReturnType<TContractName> {
