@@ -1,49 +1,23 @@
 "use client";
 
 import React, { useState } from "react";
-import { Bell, Gift, Menu, Package, Send } from "lucide-react";
+import { Giftbox } from "./_components/Giftbox";
+import { Bell, Gift, Menu, Package } from "lucide-react";
 import type { NextPage } from "next";
+import { useAccount } from "wagmi";
+import { useScaffoldReadContract } from "~~/hooks/scaffold-eth";
 
 const Dashboard: NextPage = () => {
+  const { address: connectedAddress } = useAccount();
+
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [activeTab, setActiveTab] = useState("giftboxes");
 
-  const giftboxes = [
-    {
-      id: 1,
-      recipient: "John Doe",
-      status: "Draft",
-      messages: 12,
-      tokenPot: "2.5 ETH",
-    },
-    {
-      id: 2,
-      recipient: "Sarah Smith",
-      status: "Collecting",
-      messages: 8,
-      tokenPot: "1.2 ETH",
-    },
-    {
-      id: 3,
-      recipient: "Mike Johnson",
-      status: "Ready",
-      messages: 15,
-      tokenPot: "0.8 ETH",
-    },
-  ];
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "Draft":
-        return "bg-gray-200 text-gray-800";
-      case "Collecting":
-        return "bg-blue-100 text-blue-800";
-      case "Ready":
-        return "bg-green-100 text-green-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
+  const { data: giftboxAddresses } = useScaffoldReadContract({
+    contractName: "DigitalGiftboxFactory",
+    functionName: "getUserGiftboxes",
+    args: [connectedAddress],
+  });
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -95,33 +69,7 @@ const Dashboard: NextPage = () => {
                     <th className="text-left p-4 font-semibold text-gray-600">Actions</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {giftboxes.map(giftbox => (
-                    <tr key={giftbox.id} className="border-b hover:bg-gray-50">
-                      <td className="p-4">
-                        <div className="flex items-center">
-                          <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center mr-3">
-                            {giftbox.recipient.charAt(0)}
-                          </div>
-                          {giftbox.recipient}
-                        </div>
-                      </td>
-                      <td className="p-4">
-                        <span className={`px-3 py-1 rounded-full text-sm ${getStatusColor(giftbox.status)}`}>
-                          {giftbox.status}
-                        </span>
-                      </td>
-                      <td className="p-4">{giftbox.messages}</td>
-                      <td className="p-4">{giftbox.tokenPot}</td>
-                      <td className="p-4">
-                        <button className="flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
-                          <Send className="w-4 h-4 mr-2" />
-                          Send
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
+                <tbody>{giftboxAddresses?.map(address => <Giftbox key={address} address={address} />)}</tbody>
               </table>
             </div>
           </div>

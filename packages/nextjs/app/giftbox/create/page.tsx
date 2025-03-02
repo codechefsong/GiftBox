@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { GiftboxPreview } from "./_components/GiftboxPreview";
 import { ArrowLeft, ArrowRight, Coins, Copy, Gift, MessageSquare, Send, Sparkles, Upload } from "lucide-react";
 import type { NextPage } from "next";
+import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
 const GiftboxCreator: NextPage = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -17,6 +18,11 @@ const GiftboxCreator: NextPage = () => {
     image: null,
     asset: "",
     amount: "",
+  });
+  const [showCopyLinkt, setShowCopyLink] = useState(false);
+
+  const { writeContractAsync: digitalGiftboxFactory } = useScaffoldWriteContract({
+    contractName: "DigitalGiftboxFactory",
   });
 
   const occasions = [
@@ -46,6 +52,19 @@ const GiftboxCreator: NextPage = () => {
 
   const copyInviteLink = () => {
     navigator.clipboard.writeText("https://yourgiftbox.com/invite/123xyz");
+  };
+
+  const createGiftbox = async () => {
+    try {
+      const { recipientName, occasion, title } = formData;
+      await digitalGiftboxFactory({
+        functionName: "createGiftbox",
+        args: [recipientName, occasion, title],
+      });
+      setShowCopyLink(true);
+    } catch (e) {
+      console.error("Error setting greeting:", e);
+    }
   };
 
   const renderStepContent = () => {
@@ -210,13 +229,22 @@ const GiftboxCreator: NextPage = () => {
               </div>
             </div>
 
-            <button
-              onClick={copyInviteLink}
-              className="w-full flex items-center justify-center gap-2 bg-purple-600 text-white py-3 px-4 rounded-lg hover:bg-purple-700 transition-colors focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 outline-none"
-            >
-              <Copy className="w-5 h-5" />
-              Copy Invitation Link
-            </button>
+            {!showCopyLinkt ? (
+              <button
+                onClick={createGiftbox}
+                className="w-full flex items-center justify-center gap-2 bg-purple-600 text-white py-3 px-4 rounded-lg hover:bg-purple-700 transition-colors focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 outline-none"
+              >
+                Create
+              </button>
+            ) : (
+              <button
+                onClick={copyInviteLink}
+                className="w-full flex items-center justify-center gap-2 bg-purple-600 text-white py-3 px-4 rounded-lg hover:bg-purple-700 transition-colors focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 outline-none"
+              >
+                <Copy className="w-5 h-5" />
+                Copy Invitation Link
+              </button>
+            )}
           </div>
         );
     }
