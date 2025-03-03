@@ -10,8 +10,15 @@ contract DigitalGiftbox {
     uint256 deliveryDate;
     bool isDelivered;
     uint256 tokenPot;
-    string[] messages;
     address[] contributors;
+    Message[] messages;
+
+    struct Message {
+        address owner;
+        string name;
+        string email;
+        string text;
+    }
 
     mapping(address => uint256[]) public createdGiftboxes;
     mapping(address => uint256[]) public receivedGiftboxes;
@@ -31,24 +38,15 @@ contract DigitalGiftbox {
 
     /**
      * @dev Adds a message to a giftbox
-     * @param message The message to add
+     * @param _name Name
+     * @param _email Email
+     * @param _text The message to add
      */
-    function addMessage(string memory message) public {
-        messages.push(message);
+    function addMessage(string memory _name, string memory _email, string memory _text) public {
+        Message memory newMessage = Message(msg.sender, _name, _email, _text);
+        messages.push(newMessage);
 
-        bool isContributor = false;
-        for (uint i = 0; i < contributors.length; i++) {
-            if (contributors[i] == msg.sender) {
-                isContributor = true;
-                break;
-            }
-        }
-
-        if (!isContributor) {
-            contributors.push(msg.sender);
-        }
-
-        emit MessageAdded(msg.sender, message);
+        emit MessageAdded(msg.sender, _text);
     }
 
     /**
@@ -77,7 +75,7 @@ contract DigitalGiftbox {
     /**
      * @dev Get all messages for a giftbox
      */
-    function getGiftboxMessages() public view returns (string[] memory) {
+    function getGiftboxMessages() public view returns (Message[] memory) {
         return messages;
     }
 

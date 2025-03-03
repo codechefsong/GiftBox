@@ -1,18 +1,19 @@
 "use client";
 
 import React from "react";
+import { useRouter } from "next/navigation";
 import { Coins, MessageSquare } from "lucide-react";
 import { useScaffoldReadContractWithContractAddress } from "~~/hooks/scaffold-eth/useScaffoldReadContractWithContractAddress";
 
 const GiftboxInvitation = ({ params }: { params: { address: string } }) => {
+  const router = useRouter();
+
   const { data: giftboxData } = useScaffoldReadContractWithContractAddress({
     contractName: "DigitalGiftbox",
     // @ts-ignore
     contractAddress: params.address,
     functionName: "getGiftboxDetails",
   });
-
-  const data = {};
 
   console.log(giftboxData);
 
@@ -23,7 +24,10 @@ const GiftboxInvitation = ({ params }: { params: { address: string } }) => {
           <h2 className="text-xl font-bold text-gray-900 mb-4">Giftbox</h2>
 
           <div className="flex items-center gap-3 mb-3">
-            <button className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+            <button
+              onClick={() => router.push("/giftbox/messagecontribution/" + params.address)}
+              className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+            >
               <MessageSquare className="w-4 h-4" />
               Add a message
             </button>
