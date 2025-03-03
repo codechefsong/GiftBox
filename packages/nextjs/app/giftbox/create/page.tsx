@@ -4,9 +4,12 @@ import React, { useState } from "react";
 import { GiftboxPreview } from "./_components/GiftboxPreview";
 import { ArrowLeft, ArrowRight, Coins, Copy, Gift, MessageSquare, Send, Sparkles, Upload } from "lucide-react";
 import type { NextPage } from "next";
-import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
+import { useAccount } from "wagmi";
+import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
 const GiftboxCreator: NextPage = () => {
+  const { address: connectedAddress } = useAccount();
+
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     recipientName: "",
@@ -20,6 +23,12 @@ const GiftboxCreator: NextPage = () => {
     amount: "",
   });
   const [showCopyLinkt, setShowCopyLink] = useState(false);
+
+  const { data: giftboxAddresses } = useScaffoldReadContract({
+    contractName: "DigitalGiftboxFactory",
+    functionName: "getUserGiftboxes",
+    args: [connectedAddress],
+  });
 
   const { writeContractAsync: digitalGiftboxFactory } = useScaffoldWriteContract({
     contractName: "DigitalGiftboxFactory",
@@ -51,7 +60,10 @@ const GiftboxCreator: NextPage = () => {
   };
 
   const copyInviteLink = () => {
-    navigator.clipboard.writeText("https://yourgiftbox.com/invite/123xyz");
+    if (giftboxAddresses?.length) {
+      const giftboxAddress = giftboxAddresses[giftboxAddresses.length - 1];
+      navigator.clipboard.writeText(`${window.location.origin}/giftbox/invitation/${giftboxAddress}`);
+    }
   };
 
   const createGiftbox = async () => {
