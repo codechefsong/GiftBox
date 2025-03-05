@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { MessageSlider } from "../../_components/MessageSlider";
 import { ChevronLeft, ChevronRight, Coins, MessageSquare } from "lucide-react";
 import { useScaffoldReadContractWithContractAddress } from "~~/hooks/scaffold-eth/useScaffoldReadContractWithContractAddress";
 
@@ -25,14 +26,6 @@ const GiftboxMessages = ({ params }: { params: { address: string } }) => {
   });
 
   console.log(giftboxMessages);
-
-  const handleNextMessage = () => {
-    setCurrentMessageIndex(prev => (prev + 1) % giftboxMessages.length);
-  };
-
-  const handlePrevMessage = () => {
-    setCurrentMessageIndex(prev => (prev - 1 + giftboxMessages.length) % giftboxMessages.length);
-  };
 
   const currentMessage = giftboxMessages?.length ? giftboxMessages[currentMessageIndex] : null;
 
@@ -112,20 +105,6 @@ const GiftboxMessages = ({ params }: { params: { address: string } }) => {
         <div>
           <h2 className="text-xl font-semibold mb-4 mt-3">Messages & Contributions</h2>
           <div className="relative">
-            {/* Navigation Buttons */}
-            <button
-              onClick={handlePrevMessage}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white shadow-md rounded-full p-2 hover:bg-gray-100"
-            >
-              <ChevronLeft className="w-6 h-6 text-gray-600" />
-            </button>
-            <button
-              onClick={handleNextMessage}
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white shadow-md rounded-full p-2 hover:bg-gray-100"
-            >
-              <ChevronRight className="w-6 h-6 text-gray-600" />
-            </button>
-
             {currentMessage && (
               <div className="p-4 border rounded-lg bg-gray-50 relative overflow-hidden">
                 <div className="flex items-center mb-2">
@@ -145,6 +124,8 @@ const GiftboxMessages = ({ params }: { params: { address: string } }) => {
               </div>
             )}
           </div>
+
+          <MessageSlider messages={giftboxMessages} onMessageChange={setCurrentMessageIndex} />
         </div>
       </div>
     </div>
