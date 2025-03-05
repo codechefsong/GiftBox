@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Send } from "lucide-react";
 import { useScaffoldReadContractWithContractAddress } from "~~/hooks/scaffold-eth/useScaffoldReadContractWithContractAddress";
 
@@ -31,7 +32,13 @@ export const Giftbox = ({ address }: { address: string }) => {
           <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center mr-3">
             {giftboxData?.length && giftboxData[1].charAt(0)}
           </div>
-          {giftboxData?.length && giftboxData[1]}
+          <Link
+            href={`/dashboard/giftbox/${address}`}
+            passHref
+            className="hover:text-purple-400 py-1.5 px-3 text-sm rounded-full underline"
+          >
+            {giftboxData?.length && giftboxData[1]}
+          </Link>
         </div>
       </td>
       <td className="p-4">
