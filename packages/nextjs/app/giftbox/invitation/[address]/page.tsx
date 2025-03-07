@@ -31,7 +31,10 @@ const GiftboxInvitation = ({ params }: { params: { address: string } }) => {
               <MessageSquare className="w-4 h-4" />
               Add a message
             </button>
-            <button className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+            <button
+              onClick={() => router.push("/giftbox/tokencontribution/" + params.address)}
+              className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+            >
               <Coins className="w-4 h-4" />
               Add a contribution
             </button>

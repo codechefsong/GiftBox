@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Send } from "lucide-react";
+import { Notebook, Send } from "lucide-react";
 import { useScaffoldWriteContractWithContractAddress } from "~~/hooks/scaffold-eth/useScaffoldWriteContractWithContractAddress";
 
 const MessageContributionForm = ({ params }: { params: { address: string } }) => {
@@ -52,11 +52,13 @@ const MessageContributionForm = ({ params }: { params: { address: string } }) =>
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden">
-        <div className="p-8">
-          <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold text-gray-900">Add Your Message</h1>
+        <div className="bg-purple-600 p-6 text-white">
+          <div className="flex items-center justify-center space-x-3 mb-4">
+            <Notebook className="w-8 h-8" />
+            <h1 className="text-2xl font-bold">Add Your Message</h1>
           </div>
-
+        </div>
+        <div className="p-8">
           {formSuccess ? (
             <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
               <p className="text-green-700 font-medium">Your message has been added to the giftbox!</p>

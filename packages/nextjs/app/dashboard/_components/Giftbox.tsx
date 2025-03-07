@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Send } from "lucide-react";
+import { formatEther } from "viem";
 import { useScaffoldReadContractWithContractAddress } from "~~/hooks/scaffold-eth/useScaffoldReadContractWithContractAddress";
 
 export const Giftbox = ({ address }: { address: string }) => {
@@ -47,7 +48,7 @@ export const Giftbox = ({ address }: { address: string }) => {
         </span>
       </td>
       <td className="p-4">0</td>
-      <td className="p-4">0</td>
+      <td className="p-4">{giftboxData?.length && formatEther(BigInt(giftboxData[7].toString()))} ETH</td>
       <td className="p-4">
         <button className="flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
           <Send className="w-4 h-4 mr-2" />

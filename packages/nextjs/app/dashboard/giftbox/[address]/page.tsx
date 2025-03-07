@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { MessageSlider } from "../../_components/MessageSlider";
-import { ChevronLeft, ChevronRight, Coins, MessageSquare } from "lucide-react";
+import { Coins, MessageSquare } from "lucide-react";
 import { useScaffoldReadContractWithContractAddress } from "~~/hooks/scaffold-eth/useScaffoldReadContractWithContractAddress";
 
 const GiftboxMessages = ({ params }: { params: { address: string } }) => {
@@ -43,7 +43,10 @@ const GiftboxMessages = ({ params }: { params: { address: string } }) => {
               <MessageSquare className="w-4 h-4" />
               Add a message
             </button>
-            <button className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+            <button
+              onClick={() => router.push("/giftbox/tokencontribution/" + params.address)}
+              className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+            >
               <Coins className="w-4 h-4" />
               Add a contribution
             </button>
