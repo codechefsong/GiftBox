@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Giftbox } from "./_components/Giftbox";
+import { ReceivedGiftbox } from "./_components/ReceivedGiftbox";
 import { Bell, Gift, Menu, Package } from "lucide-react";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
@@ -18,6 +19,61 @@ const Dashboard: NextPage = () => {
     functionName: "getUserGiftboxes",
     args: [connectedAddress],
   });
+
+  const { data: receivedGiftboxAddresses } = useScaffoldReadContract({
+    contractName: "DigitalGiftboxFactory",
+    functionName: "getRecipientDeployedGiftboxes",
+    args: [connectedAddress],
+  });
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case "giftboxes":
+        return (
+          <main className="p-6">
+            <div className="bg-white rounded-lg shadow">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b">
+                      <th className="text-left p-4 font-semibold text-gray-600">Recipient</th>
+                      <th className="text-left p-4 font-semibold text-gray-600">Status</th>
+                      <th className="text-left p-4 font-semibold text-gray-600">Messages</th>
+                      <th className="text-left p-4 font-semibold text-gray-600">Token Pot</th>
+                      <th className="text-left p-4 font-semibold text-gray-600">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>{giftboxAddresses?.map(address => <Giftbox key={address} address={address} />)}</tbody>
+                </table>
+              </div>
+            </div>
+          </main>
+        );
+
+      case "received":
+        return (
+          <main className="p-6">
+            <div className="bg-white rounded-lg shadow">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b">
+                      <th className="text-left p-4 font-semibold text-gray-600">Sender</th>
+                      <th className="text-left p-4 font-semibold text-gray-600">Messages</th>
+                      <th className="text-left p-4 font-semibold text-gray-600">Token Pot</th>
+                      <th className="text-left p-4 font-semibold text-gray-600">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {receivedGiftboxAddresses?.map(address => <ReceivedGiftbox key={address} address={address} />)}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </main>
+        );
+    }
+  };
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -53,27 +109,12 @@ const Dashboard: NextPage = () => {
 
       <div className="flex-1 overflow-auto">
         <header className="bg-white border-b p-4">
-          <h2 className="text-2xl font-semibold">Giftboxes</h2>
+          <h2 className="text-2xl font-semibold">
+            {activeTab === "giftboxes" ? "Giftboxes" : activeTab === "received" ? "Received" : "Not Found"}
+          </h2>
         </header>
 
-        <main className="p-6">
-          <div className="bg-white rounded-lg shadow">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b">
-                    <th className="text-left p-4 font-semibold text-gray-600">Recipient</th>
-                    <th className="text-left p-4 font-semibold text-gray-600">Status</th>
-                    <th className="text-left p-4 font-semibold text-gray-600">Messages</th>
-                    <th className="text-left p-4 font-semibold text-gray-600">Token Pot</th>
-                    <th className="text-left p-4 font-semibold text-gray-600">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>{giftboxAddresses?.map(address => <Giftbox key={address} address={address} />)}</tbody>
-              </table>
-            </div>
-          </div>
-        </main>
+        {renderContent()}
       </div>
     </div>
   );

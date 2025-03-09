@@ -97,6 +97,13 @@ contract DigitalGiftbox {
     }
 
     /**
+     * @dev Get recipient address of the giftbox
+     */
+    function getRecipientAddress() public view returns (address) {
+        return recipientAddress;
+    }
+
+    /**
      * @dev Get giftbox details
      */
     function getGiftboxDetails()

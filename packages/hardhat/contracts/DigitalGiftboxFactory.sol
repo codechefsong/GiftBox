@@ -76,4 +76,34 @@ contract DigitalGiftboxFactory {
 
         return result;
     }
+
+    /**
+     * @dev Get deployed giftboxes for recipient
+     * @param user Address of the user
+     * @return Array of giftbox addresses
+     */
+    function getRecipientDeployedGiftboxes(address user) external view returns (address[] memory) {
+        uint256 count;
+
+        for (uint256 i = 0; i < deployedGiftboxes.length; i++) {
+            DigitalGiftbox currentDigitalGiftbox = DigitalGiftbox(deployedGiftboxes[i]);
+            if (currentDigitalGiftbox.getRecipientAddress() == user) {
+                count++;
+            }
+        }
+
+        address[] memory result = new address[](count);
+        uint256 current;
+
+        for (uint256 i = 0; i < deployedGiftboxes.length; i++) {
+            DigitalGiftbox currentDigitalGiftbox = DigitalGiftbox(deployedGiftboxes[i]);
+            if (currentDigitalGiftbox.getRecipientAddress() == user) {
+                result[current] = deployedGiftboxes[i];
+                current++;
+            }
+            
+        }
+
+        return result;
+    }
 }
