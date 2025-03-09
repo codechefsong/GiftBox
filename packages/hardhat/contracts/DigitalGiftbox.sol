@@ -29,6 +29,11 @@ contract DigitalGiftbox {
     event ContributionAdded(address indexed contributor, uint256 amount);
     event GiftboxDelivered(address indexed recipient);
 
+    modifier isRecipient() {
+        require(msg.sender == recipientAddress, "Not the Recipient");
+        _;
+    }
+
     constructor(string memory _recipient, string memory _occasion, string memory _title) {
         creator = msg.sender;
         recipient = _recipient;
@@ -80,6 +85,15 @@ contract DigitalGiftbox {
         }
 
         emit ContributionAdded(msg.sender, msg.value);
+    }
+
+    /**
+     * @dev Withdraw ETH from giftbox
+     */
+    function withdraw() public isRecipient {
+        (bool success, ) = recipientAddress.call{ value: address(this).balance }("");
+        require(success, "Failed to send Ether");
+        tokenPot = 0;
     }
 
     /**

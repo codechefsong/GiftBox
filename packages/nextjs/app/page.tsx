@@ -1,9 +1,12 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { ArrowRight, Clock, Gift, MessageSquare, Palette } from "lucide-react";
 import type { NextPage } from "next";
 
 const Home: NextPage = () => {
+  const router = useRouter();
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
       <section className="container mx-auto px-4 pt-20 pb-32">
@@ -17,7 +20,10 @@ const Home: NextPage = () => {
             <p className="text-xl md:text-2xl text-gray-600">Collect unlimited contribution in any digit assets</p>
           </div>
 
-          <button className="bg-purple-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-purple-700 transition-colors duration-200 flex items-center mx-auto gap-2">
+          <button
+            onClick={() => router.push("/giftbox/create")}
+            className="bg-purple-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-purple-700 transition-colors duration-200 flex items-center mx-auto gap-2"
+          >
             Get Started <ArrowRight className="w-5 h-5" />
           </button>
         </div>
