@@ -4,11 +4,12 @@ pragma solidity ^0.8.17;
 contract DigitalGiftbox {
     address creator;
     string recipient;
+    address recipientAddress;
     string occasion;
     string title;
     uint256 createdAt;
     uint256 deliveryDate;
-    bool isDelivered;
+    string status = "Not Send";
     uint256 tokenPot;
     address[] contributors;
     Message[] messages;
@@ -47,6 +48,15 @@ contract DigitalGiftbox {
         messages.push(newMessage);
 
         emit MessageAdded(msg.sender, _text);
+    }
+
+    /**
+     * @dev Set recipient address of a giftbox
+     * @param _recipientAddress Address of the recipient
+     */
+    function setRecipientAddress(address _recipientAddress) public {
+       recipientAddress = _recipientAddress;
+       status = "Sent";
     }
 
     /**
@@ -99,7 +109,7 @@ contract DigitalGiftbox {
             string memory _title,
             uint256 _createdAt,
             uint256 _deliveryDate,
-            bool _isDelivered,
+            string memory _status,
             uint256 _tokenPot,
             uint256 _messageCount,
             uint256 _contributorCount
@@ -112,7 +122,7 @@ contract DigitalGiftbox {
             title,
             createdAt,
             deliveryDate,
-            isDelivered,
+            status,
             tokenPot,
             messages.length,
             contributors.length

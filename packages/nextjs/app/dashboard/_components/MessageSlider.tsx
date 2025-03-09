@@ -8,14 +8,14 @@ interface Message {
 }
 
 type MessageSliderProps = {
-  messages: Message[];
+  messages: readonly Message[] | Message[];
   onMessageChange: (page: number) => void;
 };
 
 export const MessageSlider = ({ messages, onMessageChange }: MessageSliderProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const handleSliderChange = e => {
+  const handleSliderChange = (e: any) => {
     const newIndex = parseInt(e.target.value);
     setCurrentIndex(newIndex);
     onMessageChange(newIndex);
