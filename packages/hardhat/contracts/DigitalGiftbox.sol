@@ -11,6 +11,7 @@ contract DigitalGiftbox {
     uint256 deliveryDate;
     string status = "Not Send";
     uint256 tokenPot;
+    string verificationTokenHex;
     address[] contributors;
     Message[] messages;
 
@@ -61,6 +62,15 @@ contract DigitalGiftbox {
      */
     function setRecipientAddress(address _recipientAddress) public {
        recipientAddress = _recipientAddress;
+       status = "Sent";
+    }
+
+    /**
+     * @dev Set recipient email of a giftbox
+     * @param _verificationTokenHex Email of the recipient
+     */
+    function setRecipientEmail(string memory _verificationTokenHex) public {
+       verificationTokenHex = _verificationTokenHex;
        status = "Sent";
     }
 

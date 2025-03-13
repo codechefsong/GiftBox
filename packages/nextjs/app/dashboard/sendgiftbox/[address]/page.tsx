@@ -41,8 +41,17 @@ const SendGiftbox = ({ params }: { params: { address: string } }) => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    console.log(deliveryMethod);
+
+    if (deliveryMethod === "email") {
+      initiateEmailClaim();
+    } else {
+      initiateWalletClaim();
+    }
+  };
+
+  const initiateWalletClaim = async () => {
     setIsLoading(true);
-    console.log(recipientInfo);
 
     try {
       await DigitalGiftbox({
@@ -52,8 +61,55 @@ const SendGiftbox = ({ params }: { params: { address: string } }) => {
 
       setIsLoading(false);
       setIsSent(true);
-    } catch (e) {
-      console.error("Error stealing milk", e);
+    } catch (err) {
+      console.error("Error sending giftbox");
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const initiateEmailClaim = async () => {
+    setIsLoading(true);
+
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/initiate-claim`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ giftAddress: params.address, email: recipientInfo }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to initiate claim");
+      }
+
+      console.log(data);
+      await saveEmail(data.verificationTokenHex);
+    } catch (err) {
+      console.error("Error sending email", err);
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const saveEmail = async (verificationTokenHex: string) => {
+    try {
+      await DigitalGiftbox({
+        functionName: "setRecipientEmail",
+        args: [verificationTokenHex],
+      });
+
+      setIsLoading(false);
+      setIsSent(true);
+    } catch (err) {
+      console.error("Error sending giftbox");
+      throw err;
+    } finally {
       setIsLoading(false);
     }
   };
