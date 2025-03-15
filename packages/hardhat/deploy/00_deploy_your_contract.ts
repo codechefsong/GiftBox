@@ -26,10 +26,11 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     recipient: "Bob",
     occasion: "Graduation",
     title: "Good Job",
+    message: "Test"
   };
   await deploy("DigitalGiftbox", {
     from: deployer,
-    args: [mockData.recipient, mockData.occasion, mockData.title],
+    args: [mockData.recipient, mockData.occasion, mockData.title, mockData.message],
     log: true,
     autoMine: true,
   });

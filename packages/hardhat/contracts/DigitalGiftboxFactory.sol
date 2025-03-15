@@ -26,9 +26,10 @@ contract DigitalGiftboxFactory {
     function createGiftbox(
         string calldata recipient,
         string calldata occasion,
-        string calldata title
+        string calldata title,
+        string calldata message
     ) public returns (address giftboxAddress) {
-        DigitalGiftbox newDigitalGiftbox = new DigitalGiftbox(recipient, occasion, title);
+        DigitalGiftbox newDigitalGiftbox = new DigitalGiftbox(recipient, occasion, title, message);
 
         deployedGiftboxes.push(address(newDigitalGiftbox));
         userGiftboxes[msg.sender].push(address(newDigitalGiftbox));

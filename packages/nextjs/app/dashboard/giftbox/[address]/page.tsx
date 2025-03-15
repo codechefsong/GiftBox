@@ -25,7 +25,7 @@ const GiftboxMessages = ({ params }: { params: { address: string } }) => {
     functionName: "getGiftboxMessages",
   });
 
-  console.log(giftboxMessages);
+  console.log(giftboxData);
 
   const currentMessage = giftboxMessages?.length ? giftboxMessages[currentMessageIndex] : null;
 
@@ -68,12 +68,12 @@ const GiftboxMessages = ({ params }: { params: { address: string } }) => {
                 </p>
               </div>
 
-              {/* {data.message && (
+              {giftboxData?.length && (
                 <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4">
                   <p className="text-sm text-gray-500 mb-1">Message</p>
-                  <p className="text-gray-800">{data.message}</p>
+                  <p className="text-gray-800">{giftboxData[10]}</p>
                 </div>
-              )} */}
+              )}
 
               {/* {data.image && (
                 <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4">

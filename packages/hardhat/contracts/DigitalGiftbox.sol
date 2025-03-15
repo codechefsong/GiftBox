@@ -12,6 +12,7 @@ contract DigitalGiftbox {
     string status = "Not Send";
     uint256 tokenPot;
     string verificationTokenHex;
+    string message;
     address[] contributors;
     Message[] messages;
 
@@ -35,12 +36,13 @@ contract DigitalGiftbox {
         _;
     }
 
-    constructor(string memory _recipient, string memory _occasion, string memory _title) {
+    constructor(string memory _recipient, string memory _occasion, string memory _title, string memory _message) {
         creator = msg.sender;
         recipient = _recipient;
         occasion = _occasion;
         title = _title;
         createdAt = block.timestamp;
+        message = _message;
     }
 
     /**
@@ -143,7 +145,8 @@ contract DigitalGiftbox {
             string memory _status,
             uint256 _tokenPot,
             uint256 _messageCount,
-            uint256 _contributorCount
+            uint256 _contributorCount,
+            string memory _message
         )
     {
         return (
@@ -156,7 +159,8 @@ contract DigitalGiftbox {
             status,
             tokenPot,
             messages.length,
-            contributors.length
+            contributors.length,
+            message
         );
     }
 }

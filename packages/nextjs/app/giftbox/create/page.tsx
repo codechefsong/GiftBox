@@ -23,6 +23,7 @@ const GiftboxCreator: NextPage = () => {
     amount: "",
   });
   const [showCopyLinkt, setShowCopyLink] = useState(false);
+  const [aimessage, setaimessage] = useState("");
 
   const { data: giftboxAddresses } = useScaffoldReadContract({
     contractName: "DigitalGiftboxFactory",
@@ -66,12 +67,36 @@ const GiftboxCreator: NextPage = () => {
     }
   };
 
+  const getAIMessage = async () => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ai`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt: formData.aiPrompt }),
+      });
+
+      const data = await response.json();
+      setaimessage(data.message);
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to initiate claim");
+      }
+
+      console.log(data);
+    } catch (err) {
+      console.error("Error sending ai prompt", err);
+      throw err;
+    }
+  };
+
   const createGiftbox = async () => {
     try {
-      const { recipientName, occasion, title } = formData;
+      const { recipientName, occasion, title, message } = formData;
       await digitalGiftboxFactory({
         functionName: "createGiftbox",
-        args: [recipientName, occasion, title],
+        args: [recipientName, occasion, title, message],
       });
       setShowCopyLink(true);
     } catch (e) {
@@ -153,11 +178,16 @@ const GiftboxCreator: NextPage = () => {
                   placeholder="Describe the message you want to generate"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none pr-12"
                 />
-                <button className="absolute right-2 top-1/2 -translate-y-1/2 text-purple-600 hover:text-purple-700">
+                <button
+                  onClick={getAIMessage}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-purple-600 hover:text-purple-700"
+                >
                   <Sparkles className="w-5 h-5" />
                 </button>
               </div>
             </div>
+
+            <p>{aimessage}</p>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Your Message</label>
