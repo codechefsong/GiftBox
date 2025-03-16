@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { GiftboxPreview } from "./_components/GiftboxPreview";
-import { ArrowLeft, ArrowRight, Coins, Copy, Gift, MessageSquare, Send, Sparkles, Upload } from "lucide-react";
+import { ArrowLeft, ArrowRight, Coins, Copy, Gift, Loader, MessageSquare, Send, Sparkles, Upload } from "lucide-react";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
 import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
@@ -11,6 +11,7 @@ const GiftboxCreator: NextPage = () => {
   const { address: connectedAddress } = useAccount();
 
   const [currentStep, setCurrentStep] = useState(1);
+  const [isGeneratingAI, setIsGeneratingAI] = useState(false);
   const [formData, setFormData] = useState({
     recipientName: "",
     occasion: "",
@@ -69,6 +70,9 @@ const GiftboxCreator: NextPage = () => {
 
   const getAIMessage = async () => {
     try {
+      if (!formData.aiPrompt.trim()) return;
+
+      setIsGeneratingAI(true);
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ai`, {
         method: "POST",
         headers: {
@@ -85,8 +89,10 @@ const GiftboxCreator: NextPage = () => {
       }
 
       console.log(data);
+      setIsGeneratingAI(false);
     } catch (err) {
       console.error("Error sending ai prompt", err);
+      setIsGeneratingAI(false);
       throw err;
     }
   };
@@ -179,12 +185,19 @@ const GiftboxCreator: NextPage = () => {
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none pr-12"
                 />
                 <button
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-purple-600 hover:text-purple-700 disabled:text-gray-400"
                   onClick={getAIMessage}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-purple-600 hover:text-purple-700"
+                  disabled={isGeneratingAI || !formData.aiPrompt.trim()}
                 >
-                  <Sparkles className="w-5 h-5" />
+                  {isGeneratingAI ? <Loader className="w-5 h-5 animate-spin" /> : <Sparkles className="w-5 h-5" />}
                 </button>
               </div>
+              {isGeneratingAI && (
+                <div className="mt-2 text-sm text-purple-600 flex items-center gap-2">
+                  <Loader className="w-4 h-4 animate-spin" />
+                  Generating message...
+                </div>
+              )}
             </div>
 
             <p>{aimessage}</p>

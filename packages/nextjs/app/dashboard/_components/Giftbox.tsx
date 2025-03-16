@@ -14,6 +14,13 @@ export const Giftbox = ({ address }: { address: string }) => {
     functionName: "getGiftboxDetails",
   });
 
+  const { data: giftboxMessages = [] } = useScaffoldReadContractWithContractAddress({
+    contractName: "DigitalGiftbox",
+    // @ts-ignore
+    contractAddress: address,
+    functionName: "getGiftboxMessages",
+  });
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case "Not Send":
@@ -50,7 +57,7 @@ export const Giftbox = ({ address }: { address: string }) => {
           <span className={`px-3 py-1 rounded-full text-sm ${getStatusColor(giftboxData[6])}`}>{giftboxData[6]}</span>
         )}
       </td>
-      <td className="p-4">0</td>
+      <td className="p-4">{giftboxMessages.length}</td>
       <td className="p-4">{giftboxData?.length && formatEther(BigInt(giftboxData[7].toString()))} ETH</td>
       <td className="p-4">
         <button

@@ -26,7 +26,7 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     recipient: "Bob",
     occasion: "Graduation",
     title: "Good Job",
-    message: "Test"
+    message: "Test",
   };
   await deploy("DigitalGiftbox", {
     from: deployer,
